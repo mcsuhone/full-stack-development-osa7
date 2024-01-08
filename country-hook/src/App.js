@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const baseURL = 'https://studies.cs.helsinki.fi/restcountries/api'
+
 const useField = (type) => {
   const [value, setValue] = useState('')
 
@@ -18,7 +20,17 @@ const useField = (type) => {
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
-  useEffect(() => {})
+  useEffect(() => {
+    const url = baseURL + '/name/' + name
+    axios.get(url)
+      .then((res) => {
+        const country = {found: true, ...res}
+        setCountry(country)
+      })
+      .catch((error) => {
+        // console.log('Country not found..')
+      })
+  }, [name])
 
   return country
 }
@@ -38,10 +50,10 @@ const Country = ({ country }) => {
 
   return (
     <div>
-      <h3>{country.data.name} </h3>
+      <h3>{country.data.name.common} </h3>
       <div>capital {country.data.capital} </div>
       <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <img src={country.data.flags.png} height='100' alt={`flag of ${country.data.name}`}/>  
     </div>
   )
 }
