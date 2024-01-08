@@ -1,10 +1,46 @@
 {
   "notes": [
-    { "id": 1, "content": "custom-hooks are awesome!" },
-    { "id": 2, "content": "best feature ever <3" }
+    {
+      "id": 1,
+      "content": "custom-hooks are awesome!"
+    },
+    {
+      "id": 2,
+      "content": "best feature ever <3"
+    },
+    {
+      "id": 3
+    },
+    {
+      "content": "uusi note haloo",
+      "id": 4
+    }
   ],
   "persons": [
-    { "id": 1, "name": "mluukkai", "number": "040-5483923" },
-    { "id": 2, "name": "hellas", "number": "012-123123" }
+    {
+      "id": 1,
+      "name": "mluukkai",
+      "number": "040-5483923"
+    },
+    {
+      "id": 2,
+      "name": "hellas",
+      "number": "012-123123"
+    },
+    {
+      "name": "joku",
+      "number": "04515192",
+      "id": 3
+    },
+    {
+      "name": "jokujoku",
+      "number": "918248192",
+      "id": 4
+    },
+    {
+      "name": "jok jokunen",
+      "number": "jkok12958",
+      "id": 5
+    }
   ]
 }
