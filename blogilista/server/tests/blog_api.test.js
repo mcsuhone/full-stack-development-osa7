@@ -5,7 +5,6 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 
-
 const Blog = require('../models/blog')
 
 mongoose.connect(config.MONGODB_URI)
@@ -37,11 +36,9 @@ describe('when there is initially some blogs saved', () => {
   test('a specific blog is within the returned blogs', async () => {
     const response = await api.get('/api/blogs')
 
-    const contents = response.body.map(b => b.title)
+    const contents = response.body.map((b) => b.title)
 
-    expect(contents).toContain(
-      'Canonical string reduction'
-    )
+    expect(contents).toContain('Canonical string reduction')
   })
 
   describe('viewing a specific blog', () => {
@@ -61,9 +58,7 @@ describe('when there is initially some blogs saved', () => {
     test('fails with status 400 if id is invalid', async () => {
       const invalidId = '5a3d5da59070081a82a3445'
 
-      await api
-        .get(`/api/blogs/${invalidId}`)
-        .expect(400)
+      await api.get(`/api/blogs/${invalidId}`).expect(400)
     })
   })
 
@@ -85,7 +80,7 @@ describe('when there is initially some blogs saved', () => {
 
       const blogs = await helper.blogsInDb()
 
-      const contents = blogs.map(r => r.title)
+      const contents = blogs.map((r) => r.title)
       expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
       expect(contents).toContain('First class tests')
     })
@@ -97,10 +92,7 @@ describe('when there is initially some blogs saved', () => {
         url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
         __v: 0
       }
-      await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(400)
+      await api.post('/api/blogs').send(newBlog).expect(400)
     })
 
     test('response with status 400 if url is not given', async () => {
@@ -110,10 +102,7 @@ describe('when there is initially some blogs saved', () => {
         author: 'Robert C. Martin',
         __v: 0
       }
-      await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(400)
+      await api.post('/api/blogs').send(newBlog).expect(400)
     })
 
     test('likes equals 0 if no likes is given', async () => {
@@ -132,7 +121,7 @@ describe('when there is initially some blogs saved', () => {
 
       const blogs = await helper.blogsInDb()
 
-      const blog = blogs.filter(b => b.title === newBlog.title)
+      const blog = blogs.filter((b) => b.title === newBlog.title)
       expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
       expect(blog[0].likes).toBe(0)
     })
@@ -143,17 +132,13 @@ describe('when there is initially some blogs saved', () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
-      await api
-        .delete(`/api/blogs/${blogToDelete.id}`)
-        .expect(204)
+      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
 
-      expect(blogsAtEnd).toHaveLength(
-        helper.initialBlogs.length - 1
-      )
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
 
-      const contents = blogsAtEnd.map(r => r.title)
+      const contents = blogsAtEnd.map((r) => r.title)
 
       expect(contents).not.toContain(blogToDelete.title)
     })
@@ -165,7 +150,6 @@ describe('when there is initially some blogs saved', () => {
     expect(response.body[0].id).toBeDefined()
   })
 })
-
 
 afterAll(async () => {
   await mongoose.connection.close()

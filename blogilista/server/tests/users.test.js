@@ -15,7 +15,11 @@ describe('when there is initially one user at db', () => {
     await User.deleteMany({})
 
     const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', name: 'juuri juures', password: passwordHash })
+    const user = new User({
+      username: 'root',
+      name: 'juuri juures',
+      password: passwordHash
+    })
 
     await user.save()
   })
@@ -26,7 +30,7 @@ describe('when there is initially one user at db', () => {
     const newUser = {
       username: 'mluukkai',
       name: 'Matti Luukkainen',
-      password: 'salainen',
+      password: 'salainen'
     }
 
     await api
@@ -38,7 +42,7 @@ describe('when there is initially one user at db', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-    const usernames = usersAtEnd.map(u => u.username)
+    const usernames = usersAtEnd.map((u) => u.username)
     expect(usernames).toContain(newUser.username)
   })
 
@@ -48,7 +52,7 @@ describe('when there is initially one user at db', () => {
     const newUser = {
       username: 'root',
       name: 'Superuser',
-      password: 'salainen',
+      password: 'salainen'
     }
 
     const result = await api
@@ -69,7 +73,7 @@ describe('when there is initially one user at db', () => {
     const newUser = {
       username: 'ro',
       name: 'Superuser',
-      password: 'salainen',
+      password: 'salainen'
     }
 
     const result = await api
@@ -78,7 +82,9 @@ describe('when there is initially one user at db', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
-    expect(result.body.error).toContain('User validation failed: username: Path `username` (`ro`) is shorter than the minimum allowed length (3).')
+    expect(result.body.error).toContain(
+      'User validation failed: username: Path `username` (`ro`) is shorter than the minimum allowed length (3).'
+    )
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
@@ -90,7 +96,7 @@ describe('when there is initially one user at db', () => {
     const newUser = {
       username: 'root',
       name: 'Superuser',
-      password: 'sa',
+      password: 'sa'
     }
 
     const result = await api

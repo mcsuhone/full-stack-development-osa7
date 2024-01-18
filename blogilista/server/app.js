@@ -14,7 +14,8 @@ morgan.token('body', (req) => JSON.stringify(req.body))
 
 logger.info('connecting to ', config.MONGODB_URI)
 
-mongoose.connect(config.MONGODB_URI)
+mongoose
+  .connect(config.MONGODB_URI)
   .then(() => {
     logger.info('connected to MongoDB')
   })
@@ -24,7 +25,11 @@ mongoose.connect(config.MONGODB_URI)
 
 app.use(cors())
 if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan(':method :url :status :response-time ms - :res[content-length] :body'))
+  app.use(
+    morgan(
+      ':method :url :status :response-time ms - :res[content-length] :body'
+    )
+  )
 }
 app.use(express.static('build'))
 app.use(express.json())

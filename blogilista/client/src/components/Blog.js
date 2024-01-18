@@ -18,7 +18,14 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   }
 
   const addLike = () => {
-    updateBlog({ title: blog.title, author: blog.author, url: blog.url, likes: blog.likes + 1, user: blog.user.id, id: blog.id })
+    updateBlog({
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id,
+      id: blog.id
+    })
   }
 
   const deleteBlog = () => {
@@ -28,10 +35,14 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   if (showFullBlog) {
     return (
       <div style={blogStyle}>
-        {blog.title} - {blog.author} <button onClick={toggleVisibility}>hide</button><br/>
-        {blog.url} <br/>
-        likes {blog.likes} <button onClick={addLike}>like</button><br/>
-        {blog.user.username}<br/>
+        {blog.title} - {blog.author}{' '}
+        <button onClick={toggleVisibility}>hide</button>
+        <br />
+        {blog.url} <br />
+        likes {blog.likes} <button onClick={addLike}>like</button>
+        <br />
+        {blog.user.username}
+        <br />
         <button onClick={deleteBlog}>remove</button>
       </div>
     )

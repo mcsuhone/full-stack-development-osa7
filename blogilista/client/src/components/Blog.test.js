@@ -10,7 +10,7 @@ test('renders title but not author, url or likes', () => {
   const blog = {
     title: 'otsikko',
     author: 'kirjoittajan nimi',
-    url: 'http://www.osoite.fi',
+    url: 'http://www.osoite.fi'
   }
 
   render(<Blog blog={blog} />)
@@ -33,7 +33,7 @@ test('renders all information when view-button is pressed', async () => {
     author: 'kirjoittajan nimi',
     url: 'http://www.osoite.fi',
     user: {
-      username: 'Matti',
+      username: 'Matti'
     }
   }
 
@@ -67,13 +67,15 @@ test('test that two like-button presses trigger event handler exatcly twice', as
     author: 'kirjoittajan nimi',
     url: 'http://www.osoite.fi',
     user: {
-      username: 'Matti',
+      username: 'Matti'
     }
   }
 
   const mockHandler = jest.fn()
 
-  const { container } = render(<Togglable buttonLabel='create new blog' mockHandler={mockHandler} />)
+  const { container } = render(
+    <Togglable buttonLabel="create new blog" mockHandler={mockHandler} />
+  )
 
   let button = container.querySelector('.toggle-button')
 
@@ -84,7 +86,7 @@ test('test that two like-button presses trigger event handler exatcly twice', as
   button = container.querySelector('.toggle-button')
   await user.click(button)
 
-  expect(mockHandler).toHaveBeenCalledTimes(2);
+  expect(mockHandler).toHaveBeenCalledTimes(2)
 })
 
 test('test that blog form calls callback function with correct information', async () => {

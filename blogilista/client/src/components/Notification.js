@@ -4,7 +4,7 @@ const Notification = forwardRef((props, ref) => {
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState('notification')
 
-  const setTimedNotification = (message, type='notification') => {
+  const setTimedNotification = (message, type = 'notification') => {
     setNotificationType(type)
     setNotificationMessage(message)
     setTimeout(() => {
@@ -19,7 +19,7 @@ const Notification = forwardRef((props, ref) => {
   })
 
   if (notificationMessage === null) {
-    return <div className='notification-banner'></div>
+    return <div className="notification-banner"></div>
   }
 
   return (

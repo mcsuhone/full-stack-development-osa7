@@ -1,0 +1,19 @@
+# package files
+package.json
+package-lock.json
+
+# dependencies
+/node_modules
+
+# database
+/flyway
+
+# production
+/build
+
+# debug
+npm-debug.log
+
+# env files
+.env
+.env*.local

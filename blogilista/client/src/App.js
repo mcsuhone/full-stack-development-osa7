@@ -7,7 +7,6 @@ import BlogForm from './components/BlogForm'
 import { login } from './services/loginService'
 import blogService from './services/blogService'
 
-
 const App = () => {
   const [user, setUserToken] = useState(null)
   const [blogs, setBlogs] = useState([])
@@ -44,13 +43,17 @@ const App = () => {
     try {
       const returnedUser = await login(credentials)
       window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(returnedUser)
+        'loggedBlogappUser',
+        JSON.stringify(returnedUser)
       )
       blogService.setToken(returnedUser.token)
       setUserToken(returnedUser)
       console.log('User logged in')
     } catch (error) {
-      notificationRef.current.setTimedNotification('wrong username or password', 'warning')
+      notificationRef.current.setTimedNotification(
+        'wrong username or password',
+        'warning'
+      )
       console.log(error.response.data.error)
     }
   }
@@ -59,11 +62,16 @@ const App = () => {
     try {
       const addedBlog = await blogService.create(blog)
       setBlogs(blogs.concat(addedBlog))
-      notificationRef.current.setTimedNotification(`a new blog ${addedBlog.title} by ${addedBlog.author} added`)
+      notificationRef.current.setTimedNotification(
+        `a new blog ${addedBlog.title} by ${addedBlog.author} added`
+      )
       reloadBlogs()
       blogFormRef.current.toggleVisibility()
-    } catch(error) {
-      notificationRef.current.setTimedNotification(error.response.data.error, 'warning')
+    } catch (error) {
+      notificationRef.current.setTimedNotification(
+        error.response.data.error,
+        'warning'
+      )
       console.log(error.response.data.error)
     }
   }
@@ -71,8 +79,14 @@ const App = () => {
   const updateBlog = async (newBlog) => {
     try {
       const updatedBlog = await blogService.update(newBlog)
-      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : { ...updatedBlog , user: blog.user }))
-    } catch(error) {
+      setBlogs(
+        blogs.map((blog) =>
+          blog.id !== updatedBlog.id
+            ? blog
+            : { ...updatedBlog, user: blog.user }
+        )
+      )
+    } catch (error) {
       console.log(error.response.data.error)
     }
   }
@@ -80,8 +94,8 @@ const App = () => {
   const removeBlog = async (blogId) => {
     try {
       await blogService.remove(blogId)
-      setBlogs(blogs.filter(blog => blog.id !== blogId))
-    } catch(error) {
+      setBlogs(blogs.filter((blog) => blog.id !== blogId))
+    } catch (error) {
       console.log(error.response.data.error)
     }
   }
@@ -94,33 +108,39 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div className='app-container'>
-        <Notification ref={notificationRef}/>
+      <div className="app-container">
+        <Notification ref={notificationRef} />
         <h2>Log in to application</h2>
-        <LoginForm handleLogin={handleLogin}
-        />
+        <LoginForm handleLogin={handleLogin} />
       </div>
     )
   }
 
-  const sortedBlogs = blogs.sort((a, b) => a.likes < b.likes ? 1 : -1)
+  const sortedBlogs = blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1))
 
   return (
-    <div className='app-container'>
+    <div className="app-container">
       <Notification ref={notificationRef} />
       <h2>blogs</h2>
 
-      <p>{user.username} logged in <button onClick={logout}>logout</button></p>
+      <p>
+        {user.username} logged in <button onClick={logout}>logout</button>
+      </p>
 
-      <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={createBlog} />
       </Togglable>
 
       <p></p>
 
-      {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog}/>
-      )}
+      {sortedBlogs.map((blog) => (
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateBlog={updateBlog}
+          removeBlog={removeBlog}
+        />
+      ))}
     </div>
   )
 }
