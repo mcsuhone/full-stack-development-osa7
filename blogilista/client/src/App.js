@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -8,10 +8,13 @@ import { login } from './services/loginService'
 import blogService from './services/blogService'
 import { useNotificationDispatch } from './reducers/notificationReducer'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { useUserDispatch, useUserValue } from './reducers/userReducer'
 
 const App = () => {
-  const [user, setUserToken] = useState(null)
+  const userDispatch = useUserDispatch()
+  const user = useUserValue()
   const notificationDispatch = useNotificationDispatch()
+
   const queryClient = useQueryClient()
 
   const updateBlogsMutation = useMutation({mutationFn: blogService.update,
@@ -39,20 +42,20 @@ const App = () => {
     if (loggedUserJSON) {
       console.log('User already logged in')
       const loggedUser = JSON.parse(loggedUserJSON)
-      setUserToken(loggedUser)
+      userDispatch({type: 'SET', payload: loggedUser})
       blogService.setToken(loggedUser.token)
     }
   }, [])
 
   const handleLogin = async (credentials) => {
     try {
-      const returnedUser = await login(credentials)
+      const loggedUser = await login(credentials)
       window.localStorage.setItem(
         'loggedBlogappUser',
-        JSON.stringify(returnedUser)
+        JSON.stringify(loggedUser)
       )
-      blogService.setToken(returnedUser.token)
-      setUserToken(returnedUser)
+      blogService.setToken(loggedUser.token)
+      userDispatch({type: 'SET', payload: loggedUser})
       console.log('User logged in')
     } catch (error) {
       notificationDispatch({
@@ -97,7 +100,7 @@ const App = () => {
 
   const logout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
-    setUserToken(null)
+    userDispatch({type: 'SET', payload: null})
     console.log('logged out')
   }
 
