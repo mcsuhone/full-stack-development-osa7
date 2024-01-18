@@ -7,12 +7,25 @@ import BlogForm from './components/BlogForm'
 import { login } from './services/loginService'
 import blogService from './services/blogService'
 import { useNotificationDispatch } from './reducers/notificationReducer'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 const App = () => {
   const [user, setUserToken] = useState(null)
-  const queryClient = useQueryClient()
   const notificationDispatch = useNotificationDispatch()
+  const queryClient = useQueryClient()
+
+  const updateBlogsMutation = useMutation({mutationFn: blogService.update,
+    onSuccess: () => {
+      queryClient.invalidateQueries('blogs')
+    }
+  })
+
+  const removeBlogMutation = useMutation({
+    mutationFn: blogService.remove,
+    onSuccess: () => {
+      queryClient.invalidateQueries('blogs');
+    },
+  });
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -67,8 +80,7 @@ const App = () => {
 
   const updateBlog = async (newBlog) => {
     try {
-      const updatedBlog = await blogService.update(newBlog)
-      queryClient.invalidateQueries({queryKey: ['blogs']})
+      updateBlogsMutation.mutate(newBlog)
     } catch (error) {
       console.log(error.response.data.error)
     }
@@ -76,7 +88,7 @@ const App = () => {
 
   const removeBlog = async (blogId) => {
     try {
-      await blogService.remove(blogId)
+      removeBlogMutation.mutate(blogId)
       queryClient.invalidateQueries({queryKey: ['blogs']})
     } catch (error) {
       console.log(error.response.data.error)
