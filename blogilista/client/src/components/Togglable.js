@@ -5,7 +5,7 @@ const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
 
   const toggleVisibility = () => {
-    props.mockHandler()
+    // props.mockHandler()
     setVisible(!visible)
   }
 
