@@ -1,34 +1,20 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import { useNotificationValue } from '../reducers/notificationReducer'
 
-const Notification = forwardRef((props, ref) => {
-  const [notificationMessage, setNotificationMessage] = useState(null)
-  const [notificationType, setNotificationType] = useState('notification')
+const Notification = () => {
+  const notification = useNotificationValue()
 
-  const setTimedNotification = (message, type = 'notification') => {
-    setNotificationType(type)
-    setNotificationMessage(message)
-    setTimeout(() => {
-      setNotificationMessage(null)
-    }, 3000)
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1,
+    marginBottom: 5
   }
 
-  useImperativeHandle(ref, () => {
-    return {
-      setTimedNotification
-    }
-  })
-
-  if (notificationMessage === null) {
-    return <div className="notification-banner"></div>
+  if (notification === '') {
+    return null
   }
 
-  return (
-    <div className={notificationType + ' notification-banner'}>
-      {notificationMessage}
-    </div>
-  )
-})
-
-Notification.displayName = 'Notification'
+  return <div style={style}>{notification}</div>
+}
 
 export default Notification

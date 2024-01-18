@@ -61,7 +61,7 @@ test('renders all information when view-button is pressed', async () => {
   })
 })
 
-test('test that two like-button presses trigger event handler exatcly twice', async () => {
+test('that two like-button presses trigger event handler exatcly twice', async () => {
   const blog = {
     title: 'otsikko',
     author: 'kirjoittajan nimi',
@@ -89,7 +89,7 @@ test('test that two like-button presses trigger event handler exatcly twice', as
   expect(mockHandler).toHaveBeenCalledTimes(2)
 })
 
-test('test that blog form calls callback function with correct information', async () => {
+test('that blog form calls callback function with correct information', async () => {
   const user = userEvent.setup()
   const createBlog = jest.fn()
 

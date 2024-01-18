@@ -6,13 +6,14 @@ import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import { login } from './services/loginService'
 import blogService from './services/blogService'
+import { useNotificationDispatch } from './reducers/notificationReducer'
 
 const App = () => {
   const [user, setUserToken] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [reloadState, setReloadBlogs] = useState(false)
+  const notificationDispatch = useNotificationDispatch()
 
-  const notificationRef = useRef()
   const blogFormRef = useRef()
 
   const reloadBlogs = () => {
@@ -50,10 +51,10 @@ const App = () => {
       setUserToken(returnedUser)
       console.log('User logged in')
     } catch (error) {
-      notificationRef.current.setTimedNotification(
-        'wrong username or password',
-        'warning'
-      )
+      notificationDispatch({
+        type: 'SET',
+        payload: 'wrong username or password'
+      })
       console.log(error.response.data.error)
     }
   }
@@ -62,16 +63,14 @@ const App = () => {
     try {
       const addedBlog = await blogService.create(blog)
       setBlogs(blogs.concat(addedBlog))
-      notificationRef.current.setTimedNotification(
-        `a new blog ${addedBlog.title} by ${addedBlog.author} added`
-      )
+      notificationDispatch({
+        type: 'SET',
+        payload: `a new blog ${addedBlog.title} by ${addedBlog.author} added`
+      })
       reloadBlogs()
       blogFormRef.current.toggleVisibility()
     } catch (error) {
-      notificationRef.current.setTimedNotification(
-        error.response.data.error,
-        'warning'
-      )
+      notificationDispatch({ type: 'SET', payload: error.response.data.error })
       console.log(error.response.data.error)
     }
   }
@@ -109,7 +108,7 @@ const App = () => {
   if (user === null) {
     return (
       <div className="app-container">
-        <Notification ref={notificationRef} />
+        <Notification />
         <h2>Log in to application</h2>
         <LoginForm handleLogin={handleLogin} />
       </div>
@@ -120,7 +119,7 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <Notification ref={notificationRef} />
+      <Notification />
       <h2>blogs</h2>
 
       <p>
