@@ -7,28 +7,19 @@ import BlogForm from './components/BlogForm'
 import { login } from './services/loginService'
 import blogService from './services/blogService'
 import { useNotificationDispatch } from './reducers/notificationReducer'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 const App = () => {
   const [user, setUserToken] = useState(null)
-  const [blogs, setBlogs] = useState([])
-  const [reloadState, setReloadBlogs] = useState(false)
+  const queryClient = useQueryClient()
   const notificationDispatch = useNotificationDispatch()
 
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll
+  })
+
   const blogFormRef = useRef()
-
-  const reloadBlogs = () => {
-    setReloadBlogs(!reloadState)
-  }
-
-  useEffect(() => {
-    async function fetchData() {
-      console.log('fetching blogs ...')
-      const response = await blogService.getAll()
-      console.log('blogs fetched')
-      setBlogs(response)
-    }
-    fetchData()
-  }, [reloadState])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -62,12 +53,11 @@ const App = () => {
   const createBlog = async (blog) => {
     try {
       const addedBlog = await blogService.create(blog)
-      setBlogs(blogs.concat(addedBlog))
       notificationDispatch({
         type: 'SET',
         payload: `a new blog ${addedBlog.title} by ${addedBlog.author} added`
       })
-      reloadBlogs()
+      queryClient.invalidateQueries({queryKey: ['blogs']})
       blogFormRef.current.toggleVisibility()
     } catch (error) {
       notificationDispatch({ type: 'SET', payload: error.response.data.error })
@@ -78,13 +68,7 @@ const App = () => {
   const updateBlog = async (newBlog) => {
     try {
       const updatedBlog = await blogService.update(newBlog)
-      setBlogs(
-        blogs.map((blog) =>
-          blog.id !== updatedBlog.id
-            ? blog
-            : { ...updatedBlog, user: blog.user }
-        )
-      )
+      queryClient.invalidateQueries({queryKey: ['blogs']})
     } catch (error) {
       console.log(error.response.data.error)
     }
@@ -93,7 +77,7 @@ const App = () => {
   const removeBlog = async (blogId) => {
     try {
       await blogService.remove(blogId)
-      setBlogs(blogs.filter((blog) => blog.id !== blogId))
+      queryClient.invalidateQueries({queryKey: ['blogs']})
     } catch (error) {
       console.log(error.response.data.error)
     }
@@ -115,7 +99,17 @@ const App = () => {
     )
   }
 
-  const sortedBlogs = blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1))
+  let blogLoading = null
+
+  if (result.isError) {
+    blogLoading = <p>anecdote service not available due to problems in server</p>
+  }
+
+  if (result.isLoading) {
+    blogLoading = <h3>Loading data ...</h3>
+  }
+
+  const sortedBlogs = result.data?.sort((a, b) => (a.likes < b.likes ? 1 : -1))
 
   return (
     <div className="app-container">
@@ -130,9 +124,9 @@ const App = () => {
         <BlogForm createBlog={createBlog} />
       </Togglable>
 
-      <p></p>
+      {blogLoading}
 
-      {sortedBlogs.map((blog) => (
+      {sortedBlogs?.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
