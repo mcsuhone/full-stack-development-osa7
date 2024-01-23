@@ -9,6 +9,11 @@ import blogService from './services/blogService'
 import { useNotificationDispatch } from './reducers/notificationReducer'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { useUserDispatch, useUserValue } from './reducers/userReducer'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
+import Users from './components/Users'
 
 const App = () => {
   const userDispatch = useUserDispatch()
@@ -104,6 +109,7 @@ const App = () => {
     console.log('logged out')
   }
 
+  // Login page
   if (user === null) {
     return (
       <div className="app-container">
@@ -127,29 +133,37 @@ const App = () => {
   const sortedBlogs = result.data?.sort((a, b) => (a.likes < b.likes ? 1 : -1))
 
   return (
-    <div className="app-container">
-      <Notification />
-      <h2>blogs</h2>
+    <Router>
+      <div className="app-container">
+        <Notification />
+        <h2>blogs</h2>
+        <p>
+          {user.name} logged in <button onClick={logout}>logout</button>
+        </p>
+        <Routes>
+          <Route path="/users" element={<Users />} />
+          <Route path="/" element={
+            <div>
+              <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+                <BlogForm createBlog={createBlog} />
+              </Togglable>
 
-      <p>
-        {user.username} logged in <button onClick={logout}>logout</button>
-      </p>
+              {blogLoading}
 
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm createBlog={createBlog} />
-      </Togglable>
-
-      {blogLoading}
-
-      {sortedBlogs?.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          updateBlog={updateBlog}
-          removeBlog={removeBlog}
-        />
-      ))}
-    </div>
+              {sortedBlogs?.map((blog) => (
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  updateBlog={updateBlog}
+                  removeBlog={removeBlog}
+                />
+              ))}
+            </div>} />
+        </Routes>
+        
+      </div>
+    </Router>
+    
   )
 }
 
