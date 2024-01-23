@@ -11,9 +11,10 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { useUserDispatch, useUserValue } from './reducers/userReducer'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route, Link, Navigate
 } from 'react-router-dom'
 import Users from './components/Users'
+import User from './components/User'
 
 const App = () => {
   const userDispatch = useUserDispatch()
@@ -45,7 +46,6 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-      console.log('User already logged in')
       const loggedUser = JSON.parse(loggedUserJSON)
       userDispatch({type: 'SET', payload: loggedUser})
       blogService.setToken(loggedUser.token)
@@ -142,6 +142,7 @@ const App = () => {
         </p>
         <Routes>
           <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<User />} />
           <Route path="/" element={
             <div>
               <Togglable buttonLabel="create new blog" ref={blogFormRef}>

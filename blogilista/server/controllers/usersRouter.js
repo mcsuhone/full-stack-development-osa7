@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
+const Blog = require('../models/blog')
+const mongoose = require('mongoose')
 
 usersRouter.get('/', async (request, response) => {
   const users = await User.aggregate([
@@ -15,7 +17,8 @@ usersRouter.get('/', async (request, response) => {
     {
       $project: {
         username: 1,
-        name: 2,
+        name: 1,
+        _id: 1,
         blogsCount: { $size: '$blogs' },
         blogs: {
           $map: {
@@ -31,9 +34,34 @@ usersRouter.get('/', async (request, response) => {
       }
     }
   ])
-  
-  response.json(users);
-  
+
+  response.json(users.map((user) => {return {...user, _id: user._id.toString()}}))
+})
+
+usersRouter.get('/:id', async (request, response) => {
+  const userID = request.params.id
+
+  const user = await User.findById(userID);
+
+  if (!user) {
+    return response.status(404).json({ error: 'User not found' });
+  }
+
+  const blogs = await Blog.find({ user: user._id });
+
+  const responseObject = {
+    _id: user._id,
+    username: user.username,
+    name: user.name,
+    blogsCount: blogs.length,
+    blogs: blogs.map(blog => ({
+      url: blog.url,
+      title: blog.title,
+      author: blog.author
+    }))
+  };
+
+  response.json(responseObject);
 })
 
 usersRouter.post('/', async (request, response, next) => {

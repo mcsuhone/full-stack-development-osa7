@@ -6,4 +6,9 @@ const getUsers = async () => {
   return response.data
 }
 
-export { getUsers }
+const getUserByID = async(id) => {
+  const response = await axios.get(baseUrl + `/${id}`)
+  return response.data
+}
+
+export { getUsers, getUserByID }
