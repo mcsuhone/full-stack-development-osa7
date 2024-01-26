@@ -9,8 +9,6 @@ const User = () => {
   useEffect(() => {
     const findBlogsOfUser = async() => {
       const foundUser = await getUserByID(id)
-      console.log('haloo')
-      console.log(foundUser)
       setUser(foundUser)
     }
     findBlogsOfUser()

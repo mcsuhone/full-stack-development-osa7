@@ -7,14 +7,15 @@ import BlogForm from './components/BlogForm'
 import { login } from './services/loginService'
 import blogService from './services/blogService'
 import { useNotificationDispatch } from './reducers/notificationReducer'
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useUserDispatch, useUserValue } from './reducers/userReducer'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, Navigate
+  Routes, Route
 } from 'react-router-dom'
 import Users from './components/Users'
 import User from './components/User'
+import BlogView from './components/BlogView'
 
 const App = () => {
   const userDispatch = useUserDispatch()
@@ -22,19 +23,6 @@ const App = () => {
   const notificationDispatch = useNotificationDispatch()
 
   const queryClient = useQueryClient()
-
-  const updateBlogsMutation = useMutation({mutationFn: blogService.update,
-    onSuccess: () => {
-      queryClient.invalidateQueries('blogs')
-    }
-  })
-
-  const removeBlogMutation = useMutation({
-    mutationFn: blogService.remove,
-    onSuccess: () => {
-      queryClient.invalidateQueries('blogs');
-    },
-  });
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -86,23 +74,6 @@ const App = () => {
     }
   }
 
-  const updateBlog = async (newBlog) => {
-    try {
-      updateBlogsMutation.mutate(newBlog)
-    } catch (error) {
-      console.log(error.response.data.error)
-    }
-  }
-
-  const removeBlog = async (blogId) => {
-    try {
-      removeBlogMutation.mutate(blogId)
-      queryClient.invalidateQueries({queryKey: ['blogs']})
-    } catch (error) {
-      console.log(error.response.data.error)
-    }
-  }
-
   const logout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     userDispatch({type: 'SET', payload: null})
@@ -143,6 +114,7 @@ const App = () => {
         <Routes>
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<User />} />
+          <Route path="/blogs/:id" element={<BlogView/>} />
           <Route path="/" element={
             <div>
               <Togglable buttonLabel="create new blog" ref={blogFormRef}>
@@ -151,13 +123,8 @@ const App = () => {
 
               {blogLoading}
 
-              {sortedBlogs?.map((blog) => (
-                <Blog
-                  key={blog.id}
-                  blog={blog}
-                  updateBlog={updateBlog}
-                  removeBlog={removeBlog}
-                />
+              {sortedBlogs?.map((blog, i) => (
+                <Blog key={i} blog={blog}></Blog>
               ))}
             </div>} />
         </Routes>
