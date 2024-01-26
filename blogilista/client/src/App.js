@@ -16,6 +16,7 @@ import {
 import Users from './components/Users'
 import User from './components/User'
 import BlogView from './components/BlogView'
+import Navbar from './components/Navbar'
 
 const App = () => {
   const userDispatch = useUserDispatch()
@@ -106,6 +107,7 @@ const App = () => {
   return (
     <Router>
       <div className="app-container">
+        <Navbar />
         <Notification />
         <h2>blogs</h2>
         <p>
