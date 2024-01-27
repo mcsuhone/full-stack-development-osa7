@@ -1,43 +1,21 @@
-.notification {
-  color: green;
-  background: lightgrey;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.warning {
-  color: red;
-  background: lightgrey;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-button {
-  background-color: white;
-  border-color: gray;
-  border-radius: 5px;
-}
 
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  background: #EEEDEB;
+  margin: 0px;
+  padding: 0px;
 }
 
-.login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+button {
+  background-color: #EEEDEB;
+  border-radius: 3px;
+  border-width: 1.5px;
+  border-color: #3C3633;
+  padding: 5px 10px;
 }
 
-.notification-banner {
-  padding-top: 200px;
+button:hover {
+  background-color: #fcf7ee;
 }

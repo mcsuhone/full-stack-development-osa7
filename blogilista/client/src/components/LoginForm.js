@@ -1,3 +1,4 @@
+import './LoginForm.css'
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
@@ -22,15 +23,15 @@ const LoginForm = ({ handleLogin }) => {
 
   return (
     <form onSubmit={submitLogin} className="login-container">
-      <div>
+      <div className='login-item'>
         username{' '}
         <input type="text" onChange={handleUsernameChange} value={username} />
       </div>
-      <div>
+      <div className='login-item'>
         password{' '}
-        <input type="text" onChange={handlePasswordChange} value={password} />
+        <input type='password' onChange={handlePasswordChange} value={password} />
       </div>
-      <div>
+      <div className='login-item'>
         <button type="submit">login</button>
       </div>
     </form>

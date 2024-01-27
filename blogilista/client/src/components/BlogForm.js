@@ -1,3 +1,4 @@
+import './BlogForm.css'
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
@@ -15,11 +16,11 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div>
+    <div className='blog-form-container'>
       <h2>create new blog</h2>
       <form onSubmit={addBlog}>
-        <div>
-          title{' '}
+        title
+        <div className='blog-form-item'>
           <input
             id="title-input"
             type="text"
@@ -27,8 +28,8 @@ const BlogForm = ({ createBlog }) => {
             value={title}
           />
         </div>
-        <div>
-          author{' '}
+        author
+        <div className='blog-form-item'> 
           <input
             id="author-input"
             type="text"
@@ -36,8 +37,8 @@ const BlogForm = ({ createBlog }) => {
             value={author}
           />
         </div>
-        <div>
-          url{' '}
+        url
+        <div className='blog-form-item'>
           <input
             id="url-input"
             type="text"
@@ -45,7 +46,7 @@ const BlogForm = ({ createBlog }) => {
             value={url}
           />
         </div>
-        <div>
+        <div className='blog-form-item'>
           <button type="submit">create</button>
         </div>
       </form>

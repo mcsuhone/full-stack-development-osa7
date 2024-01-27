@@ -1,0 +1,15 @@
+.blog-container {
+  display: flex;
+  padding: 5px;
+  border-color: #747264;
+  border-bottom: solid;
+  border-bottom-width: 1px;
+  width: 100%;
+  justify-content: center;
+  text-decoration: none;
+  color: #3C3633;
+}
+
+.blog-container:hover {
+  background-color: #dddcda;
+}

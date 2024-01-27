@@ -1,3 +1,4 @@
+import './Users.css'
 import { useEffect, useState } from "react"
 import { getUsers } from "../services/usersService"
 import { Link } from "react-router-dom"
@@ -14,10 +15,10 @@ const Users = () => {
   }, [])
 
   return (
-    <div>
+    <div className='users-container'>
       <h2>Users</h2>
       <table>
-        <tbody>
+        <tbody className='users-table-grid'>
           <tr key={0}>
             <td>user</td>
             <td><b>blogs created</b></td>

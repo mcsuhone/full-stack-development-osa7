@@ -1,0 +1,19 @@
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  background-color: #E0CCBE;
+}
+
+.navbar-item {
+  background: #E0CCBE;
+  padding: 10px 40px;
+  text-decoration: none;
+  color: #3C3633;
+  font-size: large;
+}
+
+.navbar-item:hover {
+  background: #EEEDEB;
+}

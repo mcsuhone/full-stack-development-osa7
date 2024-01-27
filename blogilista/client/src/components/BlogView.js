@@ -1,15 +1,9 @@
+import './BlogView.css'
 import React, { useState } from 'react'
 
 import { useNavigate, useParams } from 'react-router-dom'
 import blogService from '../services/blogService'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-
-const blogStyle = {
-  paddingTop: 3,
-  paddingLeft: 3,
-  paddingBottom: 3,
-  marginBottom: 5
-}
 
 const BlogView = () => {
   const blogId = useParams().id
@@ -90,13 +84,19 @@ const BlogView = () => {
   }
 
   return (
-    <div style={blogStyle}>
-      <h2>{blog?.title}</h2>
-      <a href={blog?.url} >{blog?.url}</a> <br />
-      likes {blog?.likes} <button onClick={addLike}>like</button>
-      <br />
-      added by {blog?.user?.username}
-      <br />
+    <div className='blog-view-container'>
+      <div className='blog-info-wrapper'>
+        <h2 className='blog-item'>{blog?.title}</h2>
+        <div className='blog-item'>
+          blogin osoite: <a href={blog?.url} >{blog?.url}</a> <br />
+        </div>
+        <div className='blog-item'>
+          likes {blog?.likes} <button onClick={addLike}>like</button>
+        </div>
+        <div className='blog-item'>
+          added by {blog?.user?.username}
+        </div>
+      </div>
       <button onClick={deleteBlog}>remove</button>
       <br /><br />
       <h3>comments</h3>

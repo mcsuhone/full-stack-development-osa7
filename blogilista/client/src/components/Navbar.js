@@ -1,15 +1,13 @@
+import './Navbar.css'
+
 import React from "react"
 import { Link } from "react-router-dom"
 
-const styles = {
-  marginRight: 10,
-}
-
 export default () => {
   return (
-    <div>
-      <Link style={styles} to={'/'}>blogs</Link>
-      <Link style={styles} to={'/users'}>users</Link>
+    <div className='navbar-container'>
+      <Link className='navbar-item' to={'/'}>blogs</Link>
+      <Link className='navbar-item' to={'/users'}>users</Link>
     </div>
   )
 }

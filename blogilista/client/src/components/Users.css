@@ -1,0 +1,27 @@
+.users-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Blog.css */
+
+.users-table-grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table-grid th,
+.users-table-grid td {
+  padding: 8px 20px;
+  text-align: left;
+}
+
+.users-table-grid th {
+  background-color: #f2f2f2;
+}
+
+.users-table-grid tr:hover {
+  background-color: #f1f1f1;
+  text-decoration: none;
+}

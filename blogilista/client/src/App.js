@@ -1,3 +1,4 @@
+import './App.css'
 import React, { useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -105,35 +106,36 @@ const App = () => {
   const sortedBlogs = result.data?.sort((a, b) => (a.likes < b.likes ? 1 : -1))
 
   return (
-    <Router>
-      <div className="app-container">
-        <Navbar />
-        <Notification />
+    <Router className="app-container">
+      <Navbar />
+      <Notification />
+      <div className='header-container'>
+        <div></div>
         <h2>blog app</h2>
-        <p>
+        <p className='user-item'>
           {user.name} logged in <button onClick={logout}>logout</button>
         </p>
-        <Routes>
-          <Route path="/users" element={<Users />} />
-          <Route path="/users/:id" element={<User />} />
-          <Route path="/blogs/:id" element={<BlogView/>} />
-          <Route path="/" element={
-            <div>
-              <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-                <BlogForm createBlog={createBlog} />
-              </Togglable>
+      </div>
+      
+      <Routes>
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User />} />
+        <Route path="/blogs/:id" element={<BlogView/>} />
+        <Route path="/" element={
+          <div>
+            <Togglable className='create-blog-wrapper' buttonLabel="create new blog" ref={blogFormRef}>
+              <BlogForm createBlog={createBlog} />
+            </Togglable>
 
-              {blogLoading}
-
+            {blogLoading}
+            <div className='blog-list-container'>
               {sortedBlogs?.map((blog, i) => (
                 <Blog key={i} blog={blog}></Blog>
               ))}
-            </div>} />
-        </Routes>
-        
-      </div>
+            </div>
+          </div>} />
+      </Routes>
     </Router>
-    
   )
 }
 
