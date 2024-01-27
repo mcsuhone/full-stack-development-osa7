@@ -109,7 +109,7 @@ const App = () => {
       <div className="app-container">
         <Navbar />
         <Notification />
-        <h2>blogs</h2>
+        <h2>blog app</h2>
         <p>
           {user.name} logged in <button onClick={logout}>logout</button>
         </p>

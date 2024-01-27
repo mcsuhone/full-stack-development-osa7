@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { useNavigate, useParams } from 'react-router-dom'
 import blogService from '../services/blogService'
@@ -13,7 +13,7 @@ const blogStyle = {
 
 const BlogView = () => {
   const blogId = useParams().id
-  
+  const [comment, setComment] = useState('')
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -26,7 +26,7 @@ const BlogView = () => {
   const removeBlogMutation = useMutation({
     mutationFn: blogService.remove,
     onSuccess: () => {
-      queryClient.invalidateQueries('blog');
+      queryClient.invalidateQueries('blog')
     },
   })
 
@@ -78,6 +78,17 @@ const BlogView = () => {
     removeBlog(blog.id)
   }
 
+  const handleCommentChange = (e) => {
+    setComment(e.target.value)
+  }
+
+  const handleSubmitComment = async (e) => {
+    e.preventDefault()
+    await blogService.addComment(blog.id, comment)
+    setComment('')
+    queryClient.invalidateQueries('blog');
+  }
+
   return (
     <div style={blogStyle}>
       <h2>{blog?.title}</h2>
@@ -87,6 +98,16 @@ const BlogView = () => {
       added by {blog?.user?.username}
       <br />
       <button onClick={deleteBlog}>remove</button>
+      <br /><br />
+      <h3>comments</h3>
+      <form onSubmit={handleSubmitComment}>
+        <input type='text' value={comment} onChange={handleCommentChange}/>
+        <button type='submit'>add comment</button>
+      </form>
+      <br />
+      {blog.comments.map((comment, i) => {
+        return <li key={i}>{comment}</li>
+      })}
     </div>
   )
 }

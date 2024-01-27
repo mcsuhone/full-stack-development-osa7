@@ -34,13 +34,35 @@ blogsRouter.post('/', async (request, response, next) => {
     author: body.author,
     url: body.url,
     likes: body.likes || 0,
-    user: user._id
+    user: user._id,
+    comments: []
   })
 
   try {
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
+
+    response.status(201).json(savedBlog)
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+  const { comment } = request.body
+  const blogId = request.params.id
+  if (!request.token) {
+    return response.status(401).json({ error: 'no token given' })
+  }
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+  const blog = await Blog.findById(blogId)
+  try {
+    blog.comments = blog.comments.concat(comment)
+    const savedBlog = await blog.save()
 
     response.status(201).json(savedBlog)
   } catch (exception) {
